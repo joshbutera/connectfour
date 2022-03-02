@@ -150,7 +150,15 @@
    (<== (gdl-next (connectfourControl blueplayer))
       (gdl-true (connectfourControl redplayer)))
 
+   
+   ;;; Should we check for four in a row like this?
+   ;;;(<== (connectfourFourInARow ?m1 ?n1 ?m2 ?n2 ?m3 ?n3 ?m4 ?n4 ?x)
+   ;;;   (gdl-true (connectfourCell ?m1 ?n1 ?x))
+   ;;;   (gdl-true (connectfourCell ?m2 ?n2 ?x))
+   ;;;   (gdl-true (connectfourCell ?m3 ?n3 ?x))
+   ;;;   (gdl-true (connectfourCell ?m4 ?n4 ?x)))
 
+   ;;; Or like this?
    ;;; checking for four-in-a-row columns
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell ?m ?n ?x))
