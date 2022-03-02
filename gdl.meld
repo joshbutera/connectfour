@@ -1,0 +1,191 @@
+;;;
+;;; gdl.meld
+;;;
+;;; Define Game Description Language primitives here
+;;; We construct gdl- prefixed names in order not to clash with 
+;;; existing CYC preds.
+;;;; File name: gdl.meld
+;;;;  Modified: Thursday, August 16, 2007 at 17:11:28 by forbus
+
+(in-microtheory LogicalTruthMt)
+;;(isa gdl-or LogicalConnective)  ; Can't do this.
+(isa gdl-or VariableArityRelation)
+
+(in-microtheory GamePlaying)
+
+(isa GDLPrimitive Collection)
+(comment GDLPrimitive "Predicates that are defined in the Game Definition Language Spec.")
+
+(isa GamePredicate Collection)
+(notForAnalogy GamePredicate)
+(genls GamePredicate Predicate)
+(comment GamePredicate "Predicates that are defined in individual games.")
+
+(isa GDLRole Collection)  ; tokens representing players
+
+(isa gdlEquivalent BinaryPredicate)
+(isa gdlEquivalent FunctionalPredicate)
+(notForAnalogy gdlEquivalent)  ; This is for bookkeeping, not mapping
+(arity gdlEquivalent 2)
+(arg1Isa gdlEquivalent Predicate)
+(arg2Isa gdlEquivalent Predicate)
+(comment gdlEquivalent "(gdlEquivalent <pred> <GDLPrimitive>) maps implicitly defined predicates between CycLish and KIF.")
+
+(isa gdlFileURL BinaryPredicate)
+(notForAnalogy gdlFileURL)
+(arity gdlFileURL 2)
+(arg1Isa gdlFileURL Case)
+(arg2Isa gdlFileURL CharacterString)
+(comment gdlFileURL "(gdlFileURL ?game ?file-url) maintains a backpointer to the file url of the gdl KIF file from which it was generated.")
+
+(isa gdl-init UnaryPredicate)
+(isa gdl-init GDLPrimitive)
+(ubiquitousForAnalogy gdl-init)
+(arity gdl-init 1)
+(arg1Isa gdl-init ELSentence-Assertible)
+
+(isa gdl-true UnaryPredicate)
+(isa gdl-true GDLPrimitive)
+(arity gdl-true 1)
+(arg1Isa gdl-true ELSentence-Assertible)
+
+(isa gdl-distinct BinaryPredicate)
+(isa gdl-distinct GDLPrimitive)
+(arity gdl-distinct 2)
+(arg1Isa gdl-distinct CycLTerm)
+(arg2Isa gdl-distinct CycLTerm)
+
+(isa gdl-role UnaryPredicate)
+(isa gdl-role GDLPrimitive)
+(arity gdl-role 1)
+(arg1Isa gdl-does GDLRole)
+
+(isa gdl-legal BinaryPredicate)
+(isa gdl-legal GDLPrimitive)
+(arity gdl-legal 2)
+(arg1Isa gdl-legal GDLRole)
+(arg2Isa gdl-legal ELSentence-Assertible)
+
+(isa gdl-does BinaryPredicate)
+(isa gdl-does GDLPrimitive)
+(arity gdl-does 2)
+(arg1Isa gdl-does GDLRole)
+(arg2Isa gdl-does ELSentence-Assertible)
+
+(isa gdl-next UnaryPredicate)
+(isa gdl-next GDLPrimitive)
+(arity gdl-next 1)
+(arg1Isa gdl-next ELSentence-Assertible)
+
+(isa gdl-goal BinaryPredicate)
+(isa gdl-goal GDLPrimitive)
+(arity gdl-goal 2)
+(arg1Isa gdl-goal GDLRole)
+(arg2Isa gdl-goal Integer)  ;; between 0 - 100
+
+(isa gdl-terminal Predicate)
+(isa gdl-terminal GDLPrimitive)
+(arity gdl-terminal 0)
+
+;;; Define this instead of Cyc's or, so that we can backchain on it
+;;; and embed it in Prolog-style rules:
+(isa gdl-or CommutativeRelation)
+(isa gdl-or AssociativeRelation)
+(isa gdl-or GDLPrimitive)
+(argsIsa gdl-or ELSentence-Assertible)
+
+
+;;;; These predicates are to support cross-domain analogies in GGP.  
+;;;; Tom's analysis notes some of the game-specific preds as specPreds of these,
+;;;; so that minimal ascension will kick in and do the cross-domain mapping for us.
+
+(isa GGPSpatialPredicate Predicate)
+;; (spatialLocationPred <game> <pred> <arg>) => (genlPreds <pred> GGPSpatialPredicate)
+
+(isa GGPActionPredicate Predicate)
+
+(isa GGPActionPredicate0 Predicate)  ; encode the arity in the name
+(isa GGPActionPredicate1 Predicate)
+(isa GGPActionPredicate2 Predicate)
+(isa GGPActionPredicate3 Predicate)
+(isa GGPActionPredicate4 Predicate)
+(isa GGPActionPredicate5 Predicate)
+(isa GGPActionPredicate6 Predicate)
+(isa GGPActionPredicate7 Predicate)
+(genlPreds GGPActionPredicate0 GGPActionPredicate)
+(arity GGPActionPredicate0 0)
+(genlPreds GGPActionPredicate1 GGPActionPredicate)
+(arity GGPActionPredicate1 1)
+(genlPreds GGPActionPredicate2 GGPActionPredicate)
+(arity GGPActionPredicate2 2)
+(genlPreds GGPActionPredicate3 GGPActionPredicate)
+(arity GGPActionPredicate3 3)
+(genlPreds GGPActionPredicate4 GGPActionPredicate)
+(arity GGPActionPredicate4 4)
+(genlPreds GGPActionPredicate5 GGPActionPredicate)
+(arity GGPActionPredicate5 5)
+(genlPreds GGPActionPredicate6 GGPActionPredicate)
+(arity GGPActionPredicate6 6)
+(genlPreds GGPActionPredicate7 GGPActionPredicate)
+(arity GGPActionPredicate7 7)
+
+
+(isa GGPDirectionPredicate Predicate)
+;; (directionPredicate <game> <pred>) => (genlPreds <pred> GGPDirectionPredicate)
+
+(isa GGPSuccessorRelation Predicate)
+;; (finiteSuccessorRelation <game> <pred>) => (genlPreds <pred> GGPSuccessorRelation)
+
+(isa GGPGeneralQuantityPredicate Predicate)
+;; (ggpQuantityPred <game> <pred> <a> <b>) => (genlPreds <pred> GGPGeneralQuantityPredicate)
+
+(isa GGPLocationAttributePredicate Predicate)
+;; (locationAttributeRepresentation <game> <pred>) => (genlPreds <pred> GGPLocationAttributePredicate)
+
+(isa GGPParameterPredicate Predicate)
+;; (parameterPredicate <game> <pred>) => (genlPreds <pred> GGPParameterPredicate)
+
+(isa GGPStatePredicate Predicate)
+(isa GGPStatePredicate0 Predicate)
+(isa GGPStatePredicate1 Predicate)
+(isa GGPStatePredicate2 Predicate)
+(isa GGPStatePredicate3 Predicate)
+(isa GGPStatePredicate4 Predicate)
+(isa GGPStatePredicate5 Predicate)
+(isa GGPStatePredicate6 Predicate)
+(isa GGPStatePredicate7 Predicate)
+;; (statePredicate <game> <pred>) => (genlPreds <pred> GGPStatePredicate)
+(genlPreds GGPStatePredicate0 GGPStatePredicate)  ; encode the arity in the name
+(arity GGPStatePredicate0 0)
+(genlPreds GGPStatePredicate1 GGPStatePredicate)
+(arity GGPStatePredicate1 1)
+(genlPreds GGPStatePredicate2 GGPStatePredicate)
+(arity GGPStatePredicate2 2)
+(genlPreds GGPStatePredicate3 GGPStatePredicate)
+(arity GGPStatePredicate3 3)
+(genlPreds GGPStatePredicate4 GGPStatePredicate)
+(arity GGPStatePredicate4 4)
+(genlPreds GGPStatePredicate5 GGPStatePredicate)
+(arity GGPStatePredicate5 5)
+(genlPreds GGPStatePredicate6 GGPStatePredicate)
+(arity GGPStatePredicate6 6)
+(genlPreds GGPStatePredicate7 GGPStatePredicate)
+(arity GGPStatePredicate7 7)
+
+(isa GGPStaticPredicate Predicate)
+;; (staticPredicate <game> <pred>) => (genlPreds <pred> GGPStaticPredicate)
+
+(isa GGPTurnPredicate Predicate)
+;; (turnPredicate <game> <pred>) => (genlPreds <pred> GGPTurnPredicate)
+
+(isa GGPTypePredicate Predicate)
+;; (typePredicate <game> <pred>) => (genlPreds <pred> GGPTypePredicate)
+
+(isa GGPCyclicalRelation Predicate)
+(isa GGPLatticeRelation Predicate)
+
+(isa GGPExplicitLocationRepresentationPredicate Predicate)
+
+;;;; This is needed for minimal ascension to work efficiently
+
+(ubiquitousForAnalogy genlPreds)
