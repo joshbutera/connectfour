@@ -1,0 +1,305 @@
+;;; connectfour.meld
+
+(in-microtheory BaseKB)
+
+(isa Connectfour Microtheory)
+(genlMt Connectfour GamePlaying)
+
+(in-microtheory Connectfour)
+
+(gameDomain Connectfour)
+
+;;; Vocabulary:
+
+(gdlEquivalent connectfourNoop noop)
+(isa connectfourNoop GamePredicate)
+(arity connectfourNoop 0)
+
+(gdlEquivalent connectfourOpen open)
+(isa connectfourOpen GamePredicate)
+(arity connectfourOpen 0)
+
+;;; line belonging to player p
+(gdlEquivalent connectfourLine line)
+(isa connectfourLine GamePredicate)
+(arity connectfourLine 1)
+
+;;; fourInARow checking if theres four marks in a row belonging to player p starting from point (m, n)
+(gdlEquivalent connectfourFourInARow line)
+(isa connectfourFourInARow GamePredicate)
+(arity connectfourFourInARow 3)
+
+;;; mark is putting a piece in pos (x, y)
+(gdlEquivalent connectfourMark mark)
+(isa connectfourMark GamePredicate)
+(arity connectfourMark 2)
+
+(gdlEquivalent connectfourControl control)
+(isa connectfourControl GamePredicate)
+(arity connectfourControl 1)
+
+;;; cell speciifies that player p owns cell (x, y)
+(gdlEquivalent connectfourCell cell)
+(isa connectfourCell GamePredicate)
+(arity connectfourCell 3)
+
+(isa redplayer GDLRole)
+(isa blueplayer GDLRole)
+
+;;; 7 columns 6 rows
+(gdl-init (connectfourCell 1 1 b))
+(gdl-init (connectfourCell 2 1 b))
+(gdl-init (connectfourCell 3 1 b))
+(gdl-init (connectfourCell 4 1 b))
+(gdl-init (connectfourCell 5 1 b))
+(gdl-init (connectfourCell 6 1 b))
+(gdl-init (connectfourCell 7 1 b))
+(gdl-init (connectfourCell 1 2 b))
+(gdl-init (connectfourCell 2 2 b))
+(gdl-init (connectfourCell 3 2 b))
+(gdl-init (connectfourCell 4 2 b))
+(gdl-init (connectfourCell 5 2 b))
+(gdl-init (connectfourCell 6 2 b))
+(gdl-init (connectfourCell 7 2 b))
+(gdl-init (connectfourCell 1 3 b))
+(gdl-init (connectfourCell 2 3 b))
+(gdl-init (connectfourCell 3 3 b))
+(gdl-init (connectfourCell 4 3 b))
+(gdl-init (connectfourCell 5 3 b))
+(gdl-init (connectfourCell 6 3 b))
+(gdl-init (connectfourCell 7 3 b))
+(gdl-init (connectfourCell 1 4 b))
+(gdl-init (connectfourCell 2 4 b))
+(gdl-init (connectfourCell 3 4 b))
+(gdl-init (connectfourCell 4 4 b))
+(gdl-init (connectfourCell 5 4 b))
+(gdl-init (connectfourCell 6 4 b))
+(gdl-init (connectfourCell 7 4 b))
+(gdl-init (connectfourCell 1 5 b))
+(gdl-init (connectfourCell 2 5 b))
+(gdl-init (connectfourCell 3 5 b))
+(gdl-init (connectfourCell 4 5 b))
+(gdl-init (connectfourCell 5 5 b))
+(gdl-init (connectfourCell 6 5 b))
+(gdl-init (connectfourCell 7 5 b))
+(gdl-init (connectfourCell 1 6 b))
+(gdl-init (connectfourCell 2 6 b))
+(gdl-init (connectfourCell 3 6 b))
+(gdl-init (connectfourCell 4 6 b))
+(gdl-init (connectfourCell 5 6 b))
+(gdl-init (connectfourCell 6 6 b))
+(gdl-init (connectfourCell 7 6 b))
+
+;;; redplayer starts
+(gdl-init (connectfourControl redplayer))
+
+;;; Action Primitives:
+
+(isa connectfourMark SimpleActionPredicate)
+(arity connectfourMark 2)
+
+(preconditionFor-Props
+ (and (currentRole ?w) (gdl-legal ?w (connectfourMark ?x ?y)))
+ (connectfourMark ?x ?y))
+
+;;; what is this doing??
+(effectOfAction (connectfourMark ?x ?y) ?effect
+ (withCounterfactual (gdl-does ?w (connectfourMark ?x ?y))
+  (nextStateProp ?w (connectfourMark ?x ?y) ?effect)))
+
+(isa connectfourNoop SimpleActionPredicate)
+(arity connectfourNoop 0)
+
+(preconditionFor-Props
+ (or (and (currentRole blueplayer) (gdl-legal blueplayer (connectfourNoop)))
+     (and (currentRole redplayer) (gdl-legal redplayer (connectfourNoop))))
+ (connectfourNoop))
+
+(effectOfAction (connectfourNoop) ?effect
+ (withCounterfactual (gdl-does redplayer (connectfourNoop))
+  (nextStateProp redplayer (connectfourNoop) ?effect)))
+
+(effectOfAction (connectfourNoop) ?effect
+ (withCounterfactual (gdl-does blueplayer (connectfourNoop))
+  (nextStateProp blueplayer (connectfourNoop) ?effect)))
+
+
+;;; Inference Rules:
+
+ ;;; sets cell (m, n) to red if x player marks (m, n) and (m, n) was empty 
+   (<== (gdl-next (connectfourCell ?m ?n red))
+      (gdl-does redplayer (connectfourMark ?m ?n))
+      (gdl-true (connectfourCell ?m ?n b)))
+
+   (<== (gdl-next (connectfourCell ?m ?n blue))
+      (gdl-does blueplayer (connectfourMark ?m ?n))
+      (gdl-true (connectfourCell ?m ?n b)))
+
+ ;;; not sure what this one does
+   (<== (gdl-next (connectfourCell ?m ?n ?w))
+      (gdl-true (connectfourCell ?m ?n ?w)) (gdl-distinct ?w b))
+
+   (<== (gdl-next (connectfourCell ?m ?n b))
+      (gdl-does ?w (connectfourCell ?j ?k))
+      (gdl-true (connectfourCell ?m ?n b))
+      (gdl-or (gdl-distinct ?m ?j) (gdl-distinct ?n ?k)))
+
+   (<== (gdl-next (connectfourControl redplayer))
+      (gdl-true (connectfourControl blueplayer)))
+
+   (<== (gdl-next (connectfourControl blueplayer))
+      (gdl-true (connectfourControl redplayer)))
+
+   
+   ;;; Should we check for four in a row like this?
+   ;;;(<== (connectfourFourInARow ?m1 ?n1 ?m2 ?n2 ?m3 ?n3 ?m4 ?n4 ?x)
+   ;;;   (gdl-true (connectfourCell ?m1 ?n1 ?x))
+   ;;;   (gdl-true (connectfourCell ?m2 ?n2 ?x))
+   ;;;   (gdl-true (connectfourCell ?m3 ?n3 ?x))
+   ;;;   (gdl-true (connectfourCell ?m4 ?n4 ?x)))
+
+   ;;; Or like this?
+   ;;; checking for four-in-a-row columns
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) ?n ?x))
+      (gdl-true (connectfourCell (?m + 2) ?n ?x))
+      (gdl-true (connectfourCell (?m + 3) ?n ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 1) ?n ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) ?n ?x))
+      (gdl-true (connectfourCell (?m + 2) ?n ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 2) ?n ?x))
+      (gdl-true (connectfourCell (?m - 1) ?n ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) ?n ?x)))
+   
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 3) ?n ?x))
+      (gdl-true (connectfourCell (?m - 2) ?n ?x))
+      (gdl-true (connectfourCell (?m - 1) ?n ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+
+   ;;; checking for four-in-a-row rows
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m (?n + 1) ?x))
+      (gdl-true (connectfourCell ?m (?n + 2) ?x))
+      (gdl-true (connectfourCell ?m (?n + 3) ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m (?n + 1) ?x))
+      (gdl-true (connectfourCell ?m (?n + 2) ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m (?n - 2) ?x))
+      (gdl-true (connectfourCell ?m (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m (?n + 1) ?x)))
+   
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m (?n - 3) ?x))
+      (gdl-true (connectfourCell ?m (?n - 2) ?x))
+      (gdl-true (connectfourCell ?m (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x)))
+
+   ;;; checking for four-in-a-row diagonal right
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) (?n + 1) ?x))
+      (gdl-true (connectfourCell (?m + 2) (?n + 2) ?x))
+      (gdl-true (connectfourCell (?m + 3) (?n + 3) ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) (?n + 1) ?x))
+      (gdl-true (connectfourCell (?m + 2) (?n + 2) ?x)))
+
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 2) (?n - 2) ?x))
+      (gdl-true (connectfourCell (?m - 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m + 1) (?n + 1) ?x)))
+   
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m - 3) (?n - 3) ?x))
+      (gdl-true (connectfourCell (?m - 2) (?n - 2) ?x))
+      (gdl-true (connectfourCell (?m - 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x)))
+
+   ;;; checking for four-in-a-row diagonal left
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m - 1) (?n + 1) ?x))
+      (gdl-true (connectfourCell (?m - 2) (?n + 2) ?x))
+      (gdl-true (connectfourCell (?m - 3) (?n + 3) ?x)))
+   
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m + 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m - 1) (?n + 1) ?x))
+      (gdl-true (connectfourCell (?m - 2) (?n + 2) ?x)))
+      
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m + 2) (?n - 2) ?x))
+      (gdl-true (connectfourCell (?m + 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell (?m - 1) (?n + 1) ?x)))
+   
+   (<== (connectfourFourInARow ?m ?n ?x)
+      (gdl-true (connectfourCell (?m + 3) (?n - 3) ?x))
+      (gdl-true (connectfourCell (?m + 2) (?n - 2) ?x))
+      (gdl-true (connectfourCell (?m + 1) (?n - 1) ?x))
+      (gdl-true (connectfourCell ?m ?n ?x)))
+   
+   (<== (connectfourLine ?x) (connectfourFourInARow ?m ?n ?x))
+
+   (<== (connectfourOpen) (gdl-true (connectfourCell ?m ?n b)))
+
+   (<== (gdl-legal ?w (connectfourMark ?x ?y))
+      (gdl-true (connectfourCell ?x ?y b)) (gdl-true (connectfourControl ?w)))
+
+   (<== (gdl-legal redplayer (connectfourNoop))
+      (gdl-true (connectfourControl blueplayer)))
+   
+   (<== (gdl-legal blueplayer (connectfourNoop))
+      (gdl-true (connectfourControl redplayer)))
+   
+   (<== (gdl-goal redplayer 100) (connectfourLine red))
+
+   (<== (gdl-goal redplayer 50) (uninferredSentence (connectfourLine red))
+      (uninferredSentence (connectfourLine blue))
+      (uninferredSentence (connectfourOpen)))
+
+   (<== (gdl-goal redplayer 0) (connectfourLine blue))
+
+   (<== (gdl-goal blueplayer 100) (connectfourLine blue))
+
+   (<== (gdl-goal blueplayer 50) (uninferredSentence (connectfourLine blue))
+      (uninferredSentence (connectfourLine red))
+      (uninferredSentence (connectfourOpen)))
+
+   (<== (gdl-goal blueplayer 0) (connectfourLine red))
+
+   (<== (gdl-terminal) (connectfourLine red))
+
+   (<== (gdl-terminal) (connectfourLine blue))
+
+   (<== (gdl-terminal) (uninferredSentence (connectfourOpen)))
+
+   (<== (gdl-or ?stmt1 ?i-stmt2) (trueSentence ?stmt1))
+
+   (<== (gdl-or ?i-stmt1 ?stmt2) (trueSentence ?stmt2))
+
+   (<== (gdl-distinct ?term1 ?term2) (different ?term1 ?term2))
+
+   (emptyCellToken Connectfour b)
+   (controlPredicate Connectfour connectfourControl)
+   (spatialLocationPred Connectfour connectfourCell 3)
