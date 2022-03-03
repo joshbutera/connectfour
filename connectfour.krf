@@ -2,12 +2,12 @@
 
 (in-microtheory BaseKB)
 
-(isa ConnectFour Microtheory)
-(genlMt ConnectFour GamePlaying)
+(isa Connectfour Microtheory)
+(genlMt Connectfour GamePlaying)
 
-(in-microtheory ConnectFour)
+(in-microtheory Connectfour)
 
-(gameDomain ConnectFour)
+(gameDomain Connectfour)
 
 ;;; Vocabulary:
 
