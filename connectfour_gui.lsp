@@ -23,7 +23,7 @@
       (mark :initform 'data::o :accessor mark)
       (lines :initform nil :initarg :lines :accessor lines)
       (cells :initform (make-array '(6 7) :initial-element nil) :accessor cells)
-      (center-offset :initform (cg::make-position 43 43) :reader center-offset)
+      (center-offset :initform (cg::make-position 50 50) :reader center-offset)
       (legal :initform nil :accessor legal) ; currently permissible moves 
       (gate :initform (mp:make-gate t) :accessor gate)
       (latest-move :initform nil :accessor latest-move))
