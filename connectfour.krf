@@ -176,7 +176,7 @@
       (connectfour_below ?plus1 ?m)
       (connectfour_below ?plus2 ?plus1)
       (connectfour_below ?plus3 ?plus2)
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?plus1 ?n ?x))
       (gdl-true (connectfourCell ?plus2 ?n ?x))
       (gdl-true (connectfourCell ?plus3 ?n ?x)))
@@ -186,7 +186,7 @@
       (connectfour_below ?plus2 ?plus1)
       (connectfour_below ?m ?minus1)
       (gdl-true (connectfourCell ?minus1 ?n ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?plus1 ?n ?x))
       (gdl-true (connectfourCell ?plus2 ?n ?x)))
 
@@ -196,7 +196,7 @@
       (connectfour_below ?minus1 ?minus2)
       (gdl-true (connectfourCell ?minus2 ?n ?x))
       (gdl-true (connectfourCell ?minus1 ?n ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?plus1 ?n ?x)))
 
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -206,14 +206,14 @@
       (gdl-true (connectfourCell ?minus3 ?n ?x))
       (gdl-true (connectfourCell ?minus2 ?n ?x))
       (gdl-true (connectfourCell ?minus1 ?n ?x))
-      (gdl-true (connectfourCell ?m ?n ?x)))
+      (gdl-true (connectfourCell ?m ?n b)))
 
    ;;; checking for four-in-a-row rows
    (<== (connectfourFourInARow ?m ?n ?x)
       (connectfour_below ?plus1 ?n)
       (connectfour_below ?plus2 ?plus1)
       (connectfour_below ?plus3 ?plus2)
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?m ?plus1 ?x))
       (gdl-true (connectfourCell ?m ?plus2 ?x))
       (gdl-true (connectfourCell ?m ?plus3 ?x)))
@@ -223,7 +223,7 @@
       (connectfour_below ?plus1 ?n)
       (connectfour_below ?plus2 ?plus1)
       (gdl-true (connectfourCell ?m ?minus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?m ?plus1 ?x))
       (gdl-true (connectfourCell ?m ?plus2 ?x)))
 
@@ -233,7 +233,7 @@
       (connectfour_below ?minus1 ?minus2)
       (gdl-true (connectfourCell ?m ?minus2 ?x))
       (gdl-true (connectfourCell ?m ?minus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?m ?plus1 ?x)))
 
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -243,7 +243,7 @@
       (gdl-true (connectfourCell ?m ?minus3 ?x))
       (gdl-true (connectfourCell ?m ?minus2 ?x))
       (gdl-true (connectfourCell ?m ?minus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x)))
+      (gdl-true (connectfourCell ?m ?n b)))
 
    ;;; checking for four-in-a-row diagonal right
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -253,7 +253,7 @@
       (connectfour_below ?mplus1 ?m)
       (connectfour_below ?mplus2 ?mplus1)
       (connectfour_below ?mplus3 ?mplus2)
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mplus1 ?nplus1 ?x))
       (gdl-true (connectfourCell ?mplus2 ?nplus2 ?x))
       (gdl-true (connectfourCell ?mplus3 ?nplus3 ?x)))
@@ -266,7 +266,7 @@
       (connectfour_below ?n ?nminus1)
       (connectfour_below ?m ?mminus1)
       (gdl-true (connectfourCell ?mminus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mplus1 ?nplus1 ?x))
       (gdl-true (connectfourCell ?mplus2 ?nplus2 ?x)))
 
@@ -279,7 +279,7 @@
       (connectfour_below ?mminus1 ?mminus2)
       (gdl-true (connectfourCell ?mminus2 ?nminus2 ?x))
       (gdl-true (connectfourCell ?mminus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mplus1 ?nplus1 ?x)))
 
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -292,7 +292,7 @@
       (gdl-true (connectfourCell ?mminus3 ?nminus3 ?x))
       (gdl-true (connectfourCell ?mminus2 ?nminus2 ?x))
       (gdl-true (connectfourCell ?mminus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x)))
+      (gdl-true (connectfourCell ?m ?n b)))
 
    ;;; checking for four-in-a-row diagonal left
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -302,7 +302,7 @@
       (connectfour_below ?m ?mminus1)
       (connectfour_below ?mminus1 ?mminus2)
       (connectfour_below ?mminus2 ?mminus3)
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mminus1 ?nplus1 ?x))
       (gdl-true (connectfourCell ?mminus2 ?nplus2 ?x))
       (gdl-true (connectfourCell ?mminus3 ?nplus3 ?x)))
@@ -315,7 +315,7 @@
       (connectfour_below ?nplus2 ?nplus1)
       (connectfour_below ?mplus1 ?m)
       (gdl-true (connectfourCell ?mplus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mminus1 ?nplus1 ?x))
       (gdl-true (connectfourCell ?mminus2 ?nplus2 ?x)))
 
@@ -328,7 +328,7 @@
       (connectfour_below ?mplus2 ?mplus1)
       (gdl-true (connectfourCell ?mplus2 ?nminus2 ?x))
       (gdl-true (connectfourCell ?mplus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x))
+      (gdl-true (connectfourCell ?m ?n b))
       (gdl-true (connectfourCell ?mminus1 ?nplus1 ?x)))
 
    (<== (connectfourFourInARow ?m ?n ?x)
@@ -341,7 +341,7 @@
       (gdl-true (connectfourCell ?mplus3 ?nminus3 ?x))
       (gdl-true (connectfourCell ?mplus2 ?nminus2 ?x))
       (gdl-true (connectfourCell ?mplus1 ?nminus1 ?x))
-      (gdl-true (connectfourCell ?m ?n ?x)))
+      (gdl-true (connectfourCell ?m ?n b)))
 
    (<== (connectfourLine ?x) (connectfourFourInARow ?m ?n ?x))
 
