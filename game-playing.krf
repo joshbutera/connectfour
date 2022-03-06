@@ -1,0 +1,174 @@
+;;;
+;;; game-playing.meld
+;;;
+;;; HTN plans for general game-independent strategies
+;;;
+
+(in-microtheory BaseKB)
+(isa GamePlaying Microtheory)
+(genlMt GamePlaying HTNPlanner)
+
+(in-microtheory GamePlaying)
+
+
+(isa doGameAction SimpleActionPredicate)
+(arity doGameAction 2)
+(arg1Isa doGameAction GDLRole)
+(arg2Isa doGameAction GamePredicate)
+(comment doGameAction "A primitive (for execution purposes) that means <do this action>")
+
+(isa doPlan SimpleActionPredicate)
+(isa doPlan InferentialTask)  ; generate a plan by executing a plan.
+(arity doPlan 2)
+(arg1Isa doPlan FreeCiv-Object)
+(arg2Isa doPlan ELFormula)
+(comment doPlan "(doPlan ?actor ?goalTasks) generates a plan for ?actor to achieve ?goalTasks and assigns it as the currentPlan of the actor.  ?goalTasks is a (generally non-operational) actionSequence.")
+
+(isa doAnnounce SimpleActionPredicate)
+(isa doAnnounce InferentialTask)
+(arity doAnnounce 2)
+(arg1Isa doAnnounce CharacterString)
+(arg2Isa doAnnounce CycLTerm)
+(comment doAnnounce "(doAnnounce <string> <args>) simply prints <string> to standard output (for tracing execution)")
+
+(isa doRecord SimpleActionPredicate)
+(isa doRecord InferentialTask)  ; This is inferential, but not a BookKeepingTask!
+(arg1Isa doRecord ELSentence-Assertible)
+(arity doRecord 1)
+(comment doRecord "(doRecord ?assertion) stores ?assertion in the current case in the knowledge base.")
+
+(isa doAssert SimpleActionPredicate)
+(isa doAssert InferentialTask)
+(isa doAssert BookKeepingTask)
+(arity doAssert 1)
+(comment doAssert "(doAssert ?assertion) simply adds ?assertion to the current planning context.")
+
+(effectOfAction-Props
+   (doAssert ?assertion)
+   ?assertion)
+
+(isa doTell SimpleActionPredicate)
+(isa doTell InferentialTask)  ; This is inferential, but not a BookKeepingTask!
+(arg1Isa doTell ELSentence-Assertible)
+(arity doTell 1)
+(comment doTell 
+  "(doTell ?assumption) stores ?assumption in the reasoner's working memory.  
+   Unlike doAssert, this is not just for bookkeeping during planning.")
+
+(preconditionFor-Props
+   (true)
+   (doTell ?assertion))
+
+(isa doUntell SimpleActionPredicate)
+(isa doUntell InferentialTask)
+(arg1Isa doUntell ELSentence-Assertible)
+(arity doUntell 1)
+(comment doUntell 
+  "(doUntell ?assumption) removes ?assumption from the working-memory.")
+
+(preconditionFor-Props
+   (true)
+   (doUntell ?assertion))
+
+
+(isa planTurn ComplexActionPredicate)
+(arity planTurn 1)
+(arg1Isa planTurn GDLRole)
+(comment planTurn "(planTurn ?role) is the top-level task for each turn.")
+
+(isa setupGameInstance ComplexActionPredicate)
+(arity setupGameInstance 2)
+(arg1Isa setupGameInstance Microtheory)
+(arg2Isa setupGameInstance GDLRole)
+(comment setupGameInstance "(setupGameInstance ?game-instance ?role) adds ?gameinst to the library of games for its game domain if necessary.")
+
+(isa setupGameDomain ComplexActionPredicate)
+(arity setupGameDomain 3)
+(arg1Isa setupGameDomain Microtheory)
+(arg2Isa setupGameDomain GDLRole)
+(arg3Isa setupGameDomain CaseLibrary)
+(comment setupGameDomain "(setupGameDomain ?gamedomain ?role ?domainlib) defines the case library for ?gamedomain and adds ?gamedomain to the global library of games, GamesLib if necessary.")
+
+(isa planGameActions ComplexActionPredicate)
+(arity planGameActions 2)
+(arg1Isa planGameActions Microtheory)
+(arg2Isa planGameActions GDLRole)
+(comment planGameActions "(planGameActions ?game-instance ?role) invokes domain-level turn planning.")
+
+(isa decideRandomly ComplexActionPredicate)
+(arity decideRandomly 2)
+(arg1Isa decideRandomly Microtheory)
+(arg2Isa decideRandomly GDLRole)
+(comment decideRandomly "(decideRandomly ?game-instance ?role) makes a random legal decision, recording the results for the purposes of experimentation.")
+
+;;; The top-level task is planTurn.  That's the task that the player object 
+;;; invokes the planner with.
+
+(preconditionForMethod
+  (executionContext ?gameinst)
+  (methodForAction
+    (planTurn ?role)
+    (actionSequence
+      (TheList
+        (setupGameInstance ?gameinst ?role)  ; Reify any facts as necessary before planning turn actions
+        (doPlan ?role (actionSequence (TheList (planGameActions ?gameinst ?role))))))))
+
+;; Default - game instance is already set up:
+(preconditionForMethod
+  (uninferredSentence (inferenceOnly (firstTurn ?gameinst)))
+  (methodForAction
+    (setupGameInstance ?gameinst ?role)
+    (actionSequence
+      (TheList))))
+      
+;;; If this is the first turn of the match, add it to the library.
+;;; Also, identify the overarching strategy for this game instance.
+(preconditionForMethod
+  (and (inferenceOnly (firstTurn ?gameinst))
+       (gameDomainContext ?game))
+  (methodForAction
+    (setupGameInstance ?gameinst ?role)
+    (actionSequence
+      (TheList
+        (doAnnounce "~%First turn in game: ~a" (?gameinst))
+        (setupGameDomain ?gameinst ?role ?game-lib)  ; Check if new domain
+        (doRecordMembers
+          (TheSet
+            (ist-Information BaseKB (isa ?gameinst Microtheory))
+            (ist-Information BaseKB (isa ?gameinst Individual))
+            (ist-Information ?gameinst (gameDomain ?game))))))))
+
+;;;
+;;; Plan Game Actions
+;;;
+
+;;; The default "legal move" turn planner.
+;;; Precondition should be that we are selecting blind legal moves
+;;; at each turn.
+(preconditionForMethod
+  (currentRole ?role)  ; This is *not* minimax.  Only plans for current player
+  (methodForAction
+    (planGameActions ?game-instance ?role)
+    (actionSequence
+      (TheList 
+        (doPlan ?role 
+          (actionSequence
+            (TheList (decideRandomly ?game-instance ?role))))))))
+
+(preconditionForMethod
+  (and (ist-Information ?game-instance
+        (gdl-legal ?role ?move))
+       (operatorFormulas ?pred ?move)
+         (uninferredSentence
+           (localOnly
+             (lookupOnly
+               (ist-Information ?game
+                 (identityOperator ?game ?pred))))))
+  (methodForAction
+    (decideRandomly ?game-instance ?role)
+    (actionSequence
+      (TheList
+        ?move
+        ))))
+
+;;; End of file

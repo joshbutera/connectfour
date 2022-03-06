@@ -1,0 +1,62 @@
+(in-microtheory BlueBlockMt)
+(comment BlueBlockMt
+ "BlueBlockMt contains information about a connect four where red will win on its next turn, and blue is currently taking its turn.")
+(genlMt BlueBlockMt Connectfour)
+
+(in-microtheory BlueBlockMt)
+
+;;;   1   2   3   4   5   6   7
+;;;   _   _   _   _   _   _   _     6
+;;;   _   _   _   _   _   _   _     5
+;;;   _   _   b   _   _   _   _     4
+;;;   r   _   b   _   _   _   _     3
+;;;   r   b   r   r   _   b   _     2
+;;;   r   b   b   r   r   b   _     1
+
+;;; r and b should go in (1, 4)
+
+(gdl-true (connectfourCell 1 1 redplayer))
+(gdl-true (connectfourCell 2 1 blueplayer))
+(gdl-true (connectfourCell 3 1 blueplayer))
+(gdl-true (connectfourCell 4 1 redplayer))
+(gdl-true (connectfourCell 5 1 redplayer))
+(gdl-true (connectfourCell 6 1 blueplayer))
+(gdl-true (connectfourCell 7 1 b))
+(gdl-true (connectfourCell 1 2 redplayer))
+(gdl-true (connectfourCell 2 2 blueplayer))
+(gdl-true (connectfourCell 3 2 redplayer))
+(gdl-true (connectfourCell 4 2 redplayer))
+(gdl-true (connectfourCell 5 2 b))
+(gdl-true (connectfourCell 6 2 blueplayer))
+(gdl-true (connectfourCell 7 2 b))
+(gdl-true (connectfourCell 1 3 redplayer))
+(gdl-true (connectfourCell 2 3 b))
+(gdl-true (connectfourCell 3 3 blueplayer))
+(gdl-true (connectfourCell 4 3 b))
+(gdl-true (connectfourCell 5 3 b))
+(gdl-true (connectfourCell 6 3 b))
+(gdl-true (connectfourCell 7 3 b))
+(gdl-true (connectfourCell 1 4 b))
+(gdl-true (connectfourCell 2 4 b))
+(gdl-true (connectfourCell 3 4 blueplayer))
+(gdl-true (connectfourCell 4 4 b))
+(gdl-true (connectfourCell 5 4 b))
+(gdl-true (connectfourCell 6 4 b))
+(gdl-true (connectfourCell 7 4 b))
+(gdl-true (connectfourCell 1 5 b))
+(gdl-true (connectfourCell 2 5 b))
+(gdl-true (connectfourCell 3 5 b))
+(gdl-true (connectfourCell 4 5 b))
+(gdl-true (connectfourCell 5 5 b))
+(gdl-true (connectfourCell 6 5 b))
+(gdl-true (connectfourCell 7 5 b))
+(gdl-true (connectfourCell 1 6 b))
+(gdl-true (connectfourCell 2 6 b))
+(gdl-true (connectfourCell 3 6 b))
+(gdl-true (connectfourCell 4 6 b))
+(gdl-true (connectfourCell 5 6 b))
+(gdl-true (connectfourCell 6 6 b))
+(gdl-true (connectfourCell 7 6 b))
+
+;;; blueplayer is going next
+(gdl-true (connectfourControl blueplayer))

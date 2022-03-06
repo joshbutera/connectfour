@@ -126,7 +126,7 @@
 
 ;;; Inference Rules:
 
- ;;; sets cell (m, n) to red if x player marks (m, n) and (m, n) was empty 
+ ;;; sets cell (m, n) to red if x player marks (m, n) and (m, n) was empty
    (<== (gdl-next (connectfourCell ?m ?n red))
       (gdl-does redplayer (connectfourMark ?m ?n))
       (gdl-true (connectfourCell ?m ?n b)))
@@ -150,7 +150,7 @@
    (<== (gdl-next (connectfourControl blueplayer))
       (gdl-true (connectfourControl redplayer)))
 
-   
+
    ;;; Should we check for four in a row like this?
    ;;;(<== (connectfourFourInARow ?m1 ?n1 ?m2 ?n2 ?m3 ?n3 ?m4 ?n4 ?x)
    ;;;   (gdl-true (connectfourCell ?m1 ?n1 ?x))
@@ -177,7 +177,7 @@
       (gdl-true (connectfourCell (- ?m 1) ?n ?x))
       (gdl-true (connectfourCell ?m ?n ?x))
       (gdl-true (connectfourCell (+ ?m 1) ?n ?x)))
-   
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell (- ?m 3) ?n ?x))
       (gdl-true (connectfourCell (- ?m 2) ?n ?x))
@@ -202,7 +202,7 @@
       (gdl-true (connectfourCell ?m (- ?n 1) ?x))
       (gdl-true (connectfourCell ?m ?n ?x))
       (gdl-true (connectfourCell ?m (+ ?n 1) ?x)))
-   
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell ?m (- ?n 3) ?x))
       (gdl-true (connectfourCell ?m (- ?n 2) ?x))
@@ -227,7 +227,7 @@
       (gdl-true (connectfourCell (- ?m 1) (- ?n 1) ?x))
       (gdl-true (connectfourCell ?m ?n ?x))
       (gdl-true (connectfourCell (+ ?m 1) (+ ?n 1) ?x)))
-   
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell (- ?m 3) (- ?n 3) ?x))
       (gdl-true (connectfourCell (- ?m 2) (- ?n 2) ?x))
@@ -240,38 +240,42 @@
       (gdl-true (connectfourCell (- ?m 1) (+ ?n 1) ?x))
       (gdl-true (connectfourCell (- ?m 2) (+ ?n 2) ?x))
       (gdl-true (connectfourCell (- ?m 3) (+ ?n 3) ?x)))
-   
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell (+ ?m 1) (- ?n 1) ?x))
       (gdl-true (connectfourCell ?m ?n ?x))
       (gdl-true (connectfourCell (- ?m 1) (+ ?n 1) ?x))
       (gdl-true (connectfourCell (- ?m 2) (+ ?n 2) ?x)))
-      
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell (+ ?m 2) (- ?n 2) ?x))
       (gdl-true (connectfourCell (+ ?m 1) (- ?n 1) ?x))
       (gdl-true (connectfourCell ?m ?n ?x))
       (gdl-true (connectfourCell (- ?m 1) (+ ?n 1) ?x)))
-   
+
    (<== (connectfourFourInARow ?m ?n ?x)
       (gdl-true (connectfourCell (+ ?m 3) (- ?n 3) ?x))
       (gdl-true (connectfourCell (+ ?m 2) (- ?n 2) ?x))
       (gdl-true (connectfourCell (+ ?m 1) (- ?n 1) ?x))
       (gdl-true (connectfourCell ?m ?n ?x)))
-   
+
    (<== (connectfourLine ?x) (connectfourFourInARow ?m ?n ?x))
 
    (<== (connectfourOpen) (gdl-true (connectfourCell ?m ?n b)))
 
    (<== (gdl-legal ?w (connectfourMark ?x ?y))
-      (gdl-true (connectfourCell ?x ?y b)) (gdl-true (connectfourControl ?w)))
+        (gdl-true (connectfourCell ?x ?y b))
+        (gdl-true (connectfourControl ?w))
+        (or     (valueEquals ?x 1)
+                (gdl-true (connectfourCell (- ?x 1) ?y blueplayer))
+                (gdl-true (connectfourCell (- ?x 1) ?y redplayer))))
 
    (<== (gdl-legal redplayer (connectfourNoop))
       (gdl-true (connectfourControl blueplayer)))
-   
+
    (<== (gdl-legal blueplayer (connectfourNoop))
       (gdl-true (connectfourControl redplayer)))
-   
+
    (<== (gdl-goal redplayer 100) (connectfourLine red))
 
    (<== (gdl-goal redplayer 50) (uninferredSentence (connectfourLine red))
