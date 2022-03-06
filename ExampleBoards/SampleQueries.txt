@@ -1,0 +1,11 @@
+1. Get all legal redplayer moves (must be redplayers turn)
+(gdl-legal redplayer (connectfourMark ?x ?y))
+
+2. Get all legal blueplayer moves (must be blueplayers turn)
+(gdl-legal blueplayer(connectfourMark ?x ?y))
+
+3. Get all legal moves for any player
+(gdl-legal ?player (connectfourMark ?x ?y))
+
+
+
