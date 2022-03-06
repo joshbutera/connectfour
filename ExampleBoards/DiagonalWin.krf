@@ -3,7 +3,7 @@
  "DiagonalWinMt contains information about a base case board which red could win with a four-in-a-row column.")
 (genlMt DiagonalWinMt Connectfour)
 
-(in-microtheory EmptyBoardMt)
+(in-microtheory DiagonalWinMt)
 
 
 ;;;   1   2   3   4   5   6   7
