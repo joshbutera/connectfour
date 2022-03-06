@@ -1,7 +1,7 @@
-(in-microtheory MuliplePossibilitiesWinMt)
-(comment MuliplePossibilitiesWinMt
- "MuliplePossibilitiesWinMt contains information about a base case board which red could win with a four-in-a-row column.")
-(genlMt MuliplePossibilitiesWinMt Connectfour)
+(in-microtheory MultiplePossibilitiesWinMt)
+(comment MultiplePossibilitiesWinMt
+ "MultiplePossibilitiesWinMt contains information about a base case board which redplayer could win with a four-in-a-row column.")
+(genlMt MultiplePossibilitiesWinMt Connectfour)
 
 (in-microtheory MuliplePossibilitiesWinMt)
 
@@ -15,24 +15,24 @@
 ;;;   r   b   r   r   _   r   b     1
 
 
-(gdl-true (connectfourCell 1 1 red))
-(gdl-true (connectfourCell 2 1 blue))
-(gdl-true (connectfourCell 3 1 red))
-(gdl-true (connectfourCell 4 1 red))
+(gdl-true (connectfourCell 1 1 redplayer))
+(gdl-true (connectfourCell 2 1 blueplayer))
+(gdl-true (connectfourCell 3 1 redplayer))
+(gdl-true (connectfourCell 4 1 redplayer))
 (gdl-true (connectfourCell 5 1 b))
-(gdl-true (connectfourCell 6 1 red))
-(gdl-true (connectfourCell 7 1 blue))
-(gdl-true (connectfourCell 1 2 blue))
-(gdl-true (connectfourCell 2 2 red))
-(gdl-true (connectfourCell 3 2 blue))
-(gdl-true (connectfourCell 4 2 blue))
+(gdl-true (connectfourCell 6 1 redplayer))
+(gdl-true (connectfourCell 7 1 blueplayer))
+(gdl-true (connectfourCell 1 2 blueplayer))
+(gdl-true (connectfourCell 2 2 redplayer))
+(gdl-true (connectfourCell 3 2 blueplayer))
+(gdl-true (connectfourCell 4 2 blueplayer))
 (gdl-true (connectfourCell 5 2 b))
-(gdl-true (connectfourCell 6 2 blue))
+(gdl-true (connectfourCell 6 2 blueplayer))
 (gdl-true (connectfourCell 7 2 b))
 (gdl-true (connectfourCell 1 3 b))
-(gdl-true (connectfourCell 2 3 red))
-(gdl-true (connectfourCell 3 3 red))
-(gdl-true (connectfourCell 4 3 b))
+(gdl-true (connectfourCell 2 3 b))
+(gdl-true (connectfourCell 3 3 redplayer))
+(gdl-true (connectfourCell 4 3 redplayer))
 (gdl-true (connectfourCell 5 3 b))
 (gdl-true (connectfourCell 6 3 b))
 (gdl-true (connectfourCell 7 3 b))
@@ -58,5 +58,5 @@
 (gdl-true (connectfourCell 6 6 b))
 (gdl-true (connectfourCell 7 6 b))
 
-;;; redplayer starts
+;;; redplayerplayer starts
 (gdl-true (connectfourControl redplayer))

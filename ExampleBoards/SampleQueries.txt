@@ -8,4 +8,12 @@
 (gdl-legal ?player (connectfourMark ?x ?y))
 
 
+4. Get all winning moves for red player
+(connectfourFourInARow ?m ?n redplayer)
+
+5. Get all winning moves for blue player
+(connectfourFourInARow ?m ?n blueplayer)
+
+6. Get winning moves for any player
+
 
