@@ -227,7 +227,7 @@
       (gdl-true (connectfourCell ?m ?plus1 ?x))
       (gdl-true (connectfourCell ?m ?plus2 ?x)))
 
-   (<== (connectfourFourInARow ?m ?n ?x
+   (<== (connectfourFourInARow ?m ?n ?x)
       (connectfour_below ?plus1 ?n)
       (connectfour_below ?n ?minus1)
       (connectfour_below ?minus1 ?minus2)
