@@ -3,7 +3,7 @@
  "MultiplePossibilitiesWinMt contains information about a base case board which redplayer could win with a four-in-a-row column.")
 (genlMt MultiplePossibilitiesWinMt Connectfour)
 
-(in-microtheory MuliplePossibilitiesWinMt)
+(in-microtheory MultiplePossibilitiesWinMt)
 
 
 ;;;   1   2   3   4   5   6   7
